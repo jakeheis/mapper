@@ -46,12 +46,12 @@ public extension Transform {
                 values T are the objects
      */
     @warn_unused_result
-    public static func toDictionary<T, U where T: Mappable, U: Hashable>(key getKey: T -> U) ->
+    public static func toDictionary<T, U where T: Mappable, U: Hashable>(key getKey: (T) -> U) ->
         (object: AnyObject?) throws -> [U: T]
     {
         return { object in
             guard let objects = object as? [NSDictionary] else {
-                throw MapperError.ConvertibleError(value: object, type: [NSDictionary].self)
+                throw MapperError.convertibleError(value: object, type: [NSDictionary].self)
             }
 
             var dictionary: [U: T] = [:]

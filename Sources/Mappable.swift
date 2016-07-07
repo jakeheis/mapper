@@ -35,7 +35,7 @@ public protocol Mappable {
      - returns: The object if it could be created, nil if creating the object threw an error
      */
     @warn_unused_result
-    static func from(JSON: NSDictionary) -> Self?
+    static func from(_ JSON: NSDictionary) -> Self?
 
     /**
      Convenience method for creating Mappable objects from a NSArray
@@ -45,17 +45,17 @@ public protocol Mappable {
      - returns: An array of the created objects, or nil if creating threw
      */
     @warn_unused_result
-    static func from(JSON: NSArray) -> [Self]?
+    static func from(_ JSON: NSArray) -> [Self]?
 }
 
 public extension Mappable {
     @warn_unused_result
-    public static func from(JSON: NSDictionary) -> Self? {
+    public static func from(_ JSON: NSDictionary) -> Self? {
         return try? self.init(map: Mapper(JSON: JSON))
     }
 
     @warn_unused_result
-    public static func from(JSON: NSArray) -> [Self]? {
+    public static func from(_ JSON: NSArray) -> [Self]? {
         if let array = JSON as? [NSDictionary] {
             return try? array.map { try self.init(map: Mapper(JSON: $0)) }
         }

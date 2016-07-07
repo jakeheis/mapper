@@ -31,13 +31,13 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T
      */
     @warn_unused_result
-    public func from<T>(field: String) throws -> T {
+    public func from<T>(_ field: String) throws -> T {
         let value = try self.JSONFromField(field)
         if let value = value as? T {
             return value
         }
 
-        throw MapperError.TypeMismatchError(field: field, value: value, type: T.self)
+        throw MapperError.typeMismatchError(field: field, value: value, type: T.self)
     }
 
     /**
@@ -49,7 +49,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T otherwise nil
      */
     @warn_unused_result
-    public func optionalFrom<T>(field: String) -> T? {
+    public func optionalFrom<T>(_ field: String) -> T? {
         return try? self.from(field)
     }
 
@@ -62,7 +62,7 @@ public struct Mapper {
      - returns: The first non-nil value to be produced from the array of fields, or nil if none exist
     */
     @warn_unused_result
-    public func optionalFrom<T>(fields: [String]) -> T? {
+    public func optionalFrom<T>(_ fields: [String]) -> T? {
         for field in fields {
             if let value: T = try? self.from(field) {
                 return value
@@ -90,14 +90,14 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T
      */
     @warn_unused_result
-    public func from<T: RawRepresentable>(field: String) throws -> T {
+    public func from<T: RawRepresentable>(_ field: String) throws -> T {
         let object = try self.JSONFromField(field)
         guard let rawValue = object as? T.RawValue else {
-            throw MapperError.TypeMismatchError(field: field, value: object, type: T.RawValue.self)
+            throw MapperError.typeMismatchError(field: field, value: object, type: T.RawValue.self)
         }
 
         guard let value = T(rawValue: rawValue) else {
-            throw MapperError.InvalidRawValueError(field: field, value: rawValue, type: T.self)
+            throw MapperError.invalidRawValueError(field: field, value: rawValue, type: T.self)
         }
 
         return value
@@ -114,7 +114,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T otherwise nil
      */
     @warn_unused_result
-    public func optionalFrom<T: RawRepresentable>(field: String) -> T? {
+    public func optionalFrom<T: RawRepresentable>(_ field: String) -> T? {
         return try? self.from(field)
     }
 
@@ -127,7 +127,7 @@ public struct Mapper {
      - returns: The first non-nil value to be produced from the array of fields, or nil if none exist
      */
     @warn_unused_result
-    public func optionalFrom<T: RawRepresentable>(fields: [String]) -> T? {
+    public func optionalFrom<T: RawRepresentable>(_ fields: [String]) -> T? {
         for field in fields {
             if let value: T = try? self.from(field) {
                 return value
@@ -153,13 +153,13 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T
      */
     @warn_unused_result
-    public func from<T: Mappable>(field: String) throws -> T {
+    public func from<T: Mappable>(_ field: String) throws -> T {
         let value = try self.JSONFromField(field)
         if let JSON = value as? NSDictionary {
             return try T(map: Mapper(JSON: JSON))
         }
 
-        throw MapperError.TypeMismatchError(field: field, value: value, type: NSDictionary.self)
+        throw MapperError.typeMismatchError(field: field, value: value, type: NSDictionary.self)
     }
 
     /**
@@ -179,13 +179,13 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type [T]
      */
     @warn_unused_result
-    public func from<T: Mappable>(field: String) throws -> [T] {
+    public func from<T: Mappable>(_ field: String) throws -> [T] {
         let value = try self.JSONFromField(field)
         if let JSON = value as? [NSDictionary] {
             return try JSON.map { try T(map: Mapper(JSON: $0)) }
         }
 
-        throw MapperError.TypeMismatchError(field: field, value: value, type: [NSDictionary].self)
+        throw MapperError.typeMismatchError(field: field, value: value, type: [NSDictionary].self)
     }
 
     /**
@@ -199,7 +199,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T otherwise nil
      */
     @warn_unused_result
-    public func optionalFrom<T: Mappable>(field: String) -> T? {
+    public func optionalFrom<T: Mappable>(_ field: String) -> T? {
         return try? self.from(field)
     }
 
@@ -216,7 +216,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type [T]
      */
     @warn_unused_result
-    public func optionalFrom<T: Mappable>(field: String) -> [T]? {
+    public func optionalFrom<T: Mappable>(_ field: String) -> [T]? {
         return try? self.from(field)
     }
 
@@ -229,7 +229,7 @@ public struct Mapper {
      - returns: The first non-nil value to be produced from the array of fields, or nil if none exist
      */
     @warn_unused_result
-    public func optionalFrom<T: Mappable>(fields: [String]) -> T? {
+    public func optionalFrom<T: Mappable>(_ fields: [String]) -> T? {
         for field in fields {
             if let value: T = try? self.from(field) {
                 return value
@@ -254,7 +254,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T
      */
     @warn_unused_result
-    public func from<T: Convertible where T == T.ConvertedType>(field: String) throws -> T {
+    public func from<T: Convertible where T == T.ConvertedType>(_ field: String) throws -> T {
         return try self.from(field, transformation: T.fromMap)
     }
 
@@ -273,13 +273,13 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type [T]
      */
     @warn_unused_result
-    public func from<T: Convertible where T == T.ConvertedType>(field: String) throws -> [T] {
+    public func from<T: Convertible where T == T.ConvertedType>(_ field: String) throws -> [T] {
         let value = try self.JSONFromField(field)
         if let JSON = value as? [AnyObject] {
             return try JSON.map(T.fromMap)
         }
 
-        throw MapperError.TypeMismatchError(field: field, value: value, type: [AnyObject].self)
+        throw MapperError.typeMismatchError(field: field, value: value, type: [AnyObject].self)
     }
 
     /**
@@ -293,7 +293,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type T otherwise nil
      */
     @warn_unused_result
-    public func optionalFrom<T: Convertible where T == T.ConvertedType>(field: String) -> T? {
+    public func optionalFrom<T: Convertible where T == T.ConvertedType>(_ field: String) -> T? {
         return try? self.from(field, transformation: T.fromMap)
     }
 
@@ -308,7 +308,7 @@ public struct Mapper {
      - returns: The value for the given field, if it can be converted to the expected type [T]
      */
     @warn_unused_result
-    public func optionalFrom<T: Convertible where T == T.ConvertedType>(field: String) -> [T]? {
+    public func optionalFrom<T: Convertible where T == T.ConvertedType>(_ field: String) -> [T]? {
         return try? self.from(field)
     }
 
@@ -321,7 +321,7 @@ public struct Mapper {
      - returns: The first non-nil value to be produced from the array of fields, or nil if none exist
      */
     @warn_unused_result
-    public func optionalFrom<T: Convertible where T == T.ConvertedType>(fields: [String]) -> T? {
+    public func optionalFrom<T: Convertible where T == T.ConvertedType>(_ fields: [String]) -> T? {
         for field in fields {
             if let value: T = try? self.from(field) {
                 return value
@@ -347,7 +347,7 @@ public struct Mapper {
      - returns: The value of type T for the given field
      */
     @warn_unused_result
-    public func from<T>(field: String, transformation: AnyObject? throws -> T) throws -> T {
+    public func from<T>(_ field: String, transformation: (AnyObject?) throws -> T) throws -> T {
         return try transformation(try self.JSONFromField(field))
     }
 
@@ -362,7 +362,7 @@ public struct Mapper {
                 otherwise nil
      */
     @warn_unused_result
-    public func optionalFrom<T>(field: String, transformation: AnyObject? throws -> T?) -> T? {
+    public func optionalFrom<T>(_ field: String, transformation: (AnyObject?) throws -> T?) -> T? {
         return (try? transformation(try? self.JSONFromField(field))).flatMap { $0 }
     }
 
@@ -379,11 +379,11 @@ public struct Mapper {
 
      - returns: The object for the given field
      */
-    private func JSONFromField(field: String) throws -> AnyObject {
-        if let value = field.isEmpty ? self.JSON : self.JSON.valueForKeyPath(field) {
+    private func JSONFromField(_ field: String) throws -> AnyObject {
+        if let value = field.isEmpty ? self.JSON : self.JSON.value(forKeyPath: field) {
             return value
         }
 
-        throw MapperError.MissingFieldError(field: field)
+        throw MapperError.missingFieldError(field: field)
     }
 }

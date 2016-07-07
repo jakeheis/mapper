@@ -4,7 +4,7 @@ import XCTest
 final class ConvertibleValueTests: XCTestCase {
     func testCreatingURL() {
         struct Test: Mappable {
-            let URL: NSURL
+            let URL: Foundation.URL
             init(map: Mapper) throws {
                 try self.URL = map.from("url")
             }
@@ -16,7 +16,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testOptionalURL() {
         struct Test: Mappable {
-            let URL: NSURL?
+            let URL: Foundation.URL?
             init(map: Mapper) throws {
                 self.URL = map.optionalFrom("url")
             }
@@ -28,7 +28,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testInvalidURL() {
         struct Test: Mappable {
-            let URL: NSURL?
+            let URL: Foundation.URL?
             init(map: Mapper) throws {
                 self.URL = map.optionalFrom("url")
             }
@@ -40,7 +40,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testArrayOfConvertibles() {
         struct Test: Mappable {
-            let URLs: [NSURL]
+            let URLs: [URL]
             init(map: Mapper) throws {
                 try self.URLs = map.from("urls")
             }
@@ -52,7 +52,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testOptionalArrayOfConvertibles() {
         struct Test: Mappable {
-            let URLs: [NSURL]?
+            let URLs: [URL]?
             init(map: Mapper) throws {
                 self.URLs = map.optionalFrom("urls")
             }
@@ -64,7 +64,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testExistingOptionalArrayOfConvertibles() {
         struct Test: Mappable {
-            let URLs: [NSURL]?
+            let URLs: [URL]?
             init(map: Mapper) throws {
                 self.URLs = map.optionalFrom("urls")
             }
@@ -76,7 +76,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testInvalidArrayOfConvertibles() {
         struct Test: Mappable {
-            let URLs: [NSURL]
+            let URLs: [URL]
             init(map: Mapper) throws {
                 try self.URLs = map.from("urls")
             }
@@ -88,7 +88,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testInvalidArrayOfOptionalConvertibles() {
         struct Test: Mappable {
-            let URLs: [NSURL]?
+            let URLs: [URL]?
             init(map: Mapper) throws {
                 self.URLs = map.optionalFrom("urls")
             }
@@ -100,7 +100,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testConvertibleArrayOfKeys() {
         struct Test: Mappable {
-            let URL: NSURL?
+            let URL: Foundation.URL?
             init(map: Mapper) throws {
                 self.URL = map.optionalFrom(["a", "b"])
             }
@@ -112,7 +112,7 @@ final class ConvertibleValueTests: XCTestCase {
 
     func testConvertibleArrayOfKeysReturnsNil() {
         struct Test: Mappable {
-            let URL: NSURL?
+            let URL: Foundation.URL?
             init(map: Mapper) throws {
                 self.URL = map.optionalFrom(["a", "b"])
             }

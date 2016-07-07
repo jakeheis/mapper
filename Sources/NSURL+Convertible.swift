@@ -3,7 +3,7 @@ import Foundation
 /**
  NSURL Convertible implementation
  */
-extension NSURL: Convertible {
+extension URL: Convertible {
     /**
      Create a NSURL from Mapper
 
@@ -15,15 +15,15 @@ extension NSURL: Convertible {
      - returns: The created NSURL
      */
     @warn_unused_result
-    public static func fromMap(value: AnyObject?) throws -> NSURL {
+    public static func fromMap(_ value: AnyObject?) throws -> URL {
         guard let string = value as? String else {
-            throw MapperError.ConvertibleError(value: value, type: String.self)
+            throw MapperError.convertibleError(value: value, type: String.self)
         }
 
-        if let URL = NSURL(string: string) {
+        if let URL = URL(string: string) {
             return URL
         }
 
-        throw MapperError.CustomError(field: nil, message: "'\(string)' is not a valid NSURL")
+        throw MapperError.customError(field: nil, message: "'\(string)' is not a valid NSURL")
     }
 }
